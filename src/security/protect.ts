@@ -4,9 +4,15 @@
  *  এটি ব্রাউজারের ক্লায়েন্ট-সাইড জাভাস্ক্রিপ্ট দিয়ে বানানো একটি
  *  best-effort প্রতিরোধ ব্যবস্থা। কোনো ক্লায়েন্ট-সাইড কোড দিয়েই
  *  ১০০% নিশ্চিতভাবে DevTools বন্ধ করা বা সোর্স কোড দেখা আটকানো
- *  সম্ভব না (যেমন কেউ জাভাস্ক্রিপ্ট বন্ধ করে ব্রাউজ করলে, অথবা
- *  ব্রাউজার এক্সটেনশন ব্যবহার করলে এই কোড কাজ করবে না)। এটি শুধু
- *  সাধারণ ব্যবহারকারীদের নিরুৎসাহিত করে।
+ *  সম্ভব না। এটি শুধু সাধারণ ব্যবহারকারীদের নিরুৎসাহিত করে।
+ *
+ *  পরিবর্তন: এই ভার্সনে রাইট-ক্লিক মেনু স্বাভাবিকভাবে খুলবে
+ *  (blockRightClick বাদ দেওয়া হয়েছে), কারণ ব্রাউজারের নেটিভ
+ *  কনটেক্সট মেনুর কোন আইটেমে ক্লিক হলো তা JS দিয়ে জানা সম্ভব
+ *  না — এটা ব্রাউজার sandbox এর বাইরে। তাই "Inspect" মেনু-আইটেম
+ *  আলাদাভাবে ব্লক করার বদলে, DevTools সত্যিই খোলা হয়েছে কিনা তা
+ *  detectDevTools() দিয়ে মনিটর করা হচ্ছে — এটা F12, শর্টকাট, বা
+ *  রাইট-ক্লিক মেনু থেকে "Inspect" — যেভাবেই খোলা হোক না কেন ধরবে।
  * ==============================================================
  */
 
@@ -36,9 +42,14 @@ function blockShortcuts(): void {
   });
 }
 
-function blockRightClick(): void {
-  document.addEventListener("contextmenu", (e) => e.preventDefault());
-}
+// blockRightClick() ইচ্ছাকৃতভাবে বাদ দেওয়া হয়েছে — এখন রাইট-ক্লিক
+// মেনু স্বাভাবিকভাবে খুলবে (Back/Forward/Save as/Inspect ইত্যাদি সহ)।
+// যদি আবার চান, শুধু নিচের ফাংশনটা রিস্টোর করে initProtection() এ
+// কল করুন:
+//
+// function blockRightClick(): void {
+//   document.addEventListener("contextmenu", (e) => e.preventDefault());
+// }
 
 function blockSelectionAndDrag(): void {
   document.addEventListener("selectstart", (e) => e.preventDefault());
@@ -54,6 +65,10 @@ function blockSelectionAndDrag(): void {
  *  ২) উইন্ডোর আকার বনাম ভিউপোর্টের পার্থক্য (docked devtools)।
  * ভুল শনাক্তকরণ এড়াতে পরপর কয়েকবার সন্দেহজনক ফল পেলে তবেই
  * about:blank এ পাঠানো হয়।
+ *
+ * এই ফাংশনটাই এখন রাইট-ক্লিক থেকে "Inspect" খোলার ঘটনাও ধরবে,
+ * কারণ কীভাবে DevTools খোলা হলো তা নয়, DevTools আসলেই খোলা আছে
+ * কিনা সেটাই এটি চেক করে।
  */
 function detectDevTools(): void {
   let strikes = 0;
@@ -85,7 +100,7 @@ function detectDevTools(): void {
 
 export function initProtection(): void {
   blockShortcuts();
-  blockRightClick();
+  // blockRightClick(); // <- বাদ দেওয়া হয়েছে, রাইট-ক্লিক মেনু এখন স্বাভাবিক
   blockSelectionAndDrag();
   detectDevTools();
 }
