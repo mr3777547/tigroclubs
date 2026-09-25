@@ -1,0 +1,106 @@
+:root {
+  --bg: #161a2c;
+  --nav-bg: #232a45;
+  --nav-active-bg: #e6483c;
+  --text: #f5f6fe;
+  --text-dim: #b7beda;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", "Noto Sans Bengali", system-ui, -apple-system, sans-serif;
+  overscroll-behavior: none;
+}
+
+#app {
+  height: 100%;
+  position: relative;
+}
+
+/* -------- page content -------- */
+.page-content {
+  min-height: 100%;
+  padding-bottom: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page {
+  text-align: center;
+  padding: 24px;
+}
+
+.page h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* -------- bottom nav bar -------- */
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 56px;
+  background: var(--nav-bg);
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  padding: 4px 6px;
+  gap: 6px;
+  z-index: 10;
+}
+
+.nav-item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--text-dim);
+  border-radius: 14px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-item.active {
+  background: var(--nav-active-bg);
+  color: var(--text);
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+.nav-label {
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  color: inherit;
+  white-space: nowrap;
+}
